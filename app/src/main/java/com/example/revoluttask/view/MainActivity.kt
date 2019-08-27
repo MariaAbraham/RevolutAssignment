@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.example.revoluttask.R
 import com.example.revoluttask.data.model.Currency
 import com.example.revoluttask.data.repository.RepositoryProvider
 import com.google.android.material.appbar.CollapsingToolbarLayout
@@ -32,11 +33,11 @@ class MainActivity : AppCompatActivity(), BaseChangeListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(com.example.revoluttask.R.layout.activity_main)
+        setContentView(R.layout.activity_main)
 
-        val toolbar = findViewById<Toolbar>(com.example.revoluttask.R.id.toolbar)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        val collapsingToolbar = findViewById<CollapsingToolbarLayout>(com.example.revoluttask.R.id.toolbar_layout)
+        val collapsingToolbar = findViewById<CollapsingToolbarLayout>(R.id.toolbar_layout)
         collapsingToolbar.title = "Rates"
         initializeAdapter()
 
@@ -60,11 +61,13 @@ class MainActivity : AppCompatActivity(), BaseChangeListener {
     }
 
     private fun initializeAdapter() {
+
         recyler_currency.layoutManager = LinearLayoutManager(this)
         recyler_currency.hasFixedSize()
         currencyListAdapter = CurrencyListAdapter(this, currencyList, this)
-        recyler_currency.adapter = currencyListAdapter
+
         (recyler_currency.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        recyler_currency.adapter = currencyListAdapter
     }
 
     private fun syncCurrencyRates() {

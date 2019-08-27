@@ -50,7 +50,7 @@ class CurrencyListAdapter(
         fun bindView(context: Context, currency: Currency, changeListener: BaseChangeListener, isFirst: Boolean = false) {
             bindTextAndImage(context, currency)
 
-            if (isFirst) bindFirst(currency, changeListener) else bindNoneFirst(currency, changeListener)
+            if (isFirst) bindFirst(currency, changeListener) else bindNonFirst(currency, changeListener)
         }
 
         private fun bindFirst(currency: Currency, changeListener: BaseChangeListener) {
@@ -75,10 +75,10 @@ class CurrencyListAdapter(
             })
         }
 
-        private fun bindNoneFirst(currency: Currency, changeListener: BaseChangeListener) {
+        private fun bindNonFirst(currency: Currency, changeListener: BaseChangeListener) {
             overlay.visibility = View.VISIBLE
+            edtCurrency.setText("")
             edtCurrency.hint = String.format("%.4f", currency.value)
-
             overlay.setOnClickListener(View.OnClickListener {
                 changeListener.onBaseChange(currency)
             })
