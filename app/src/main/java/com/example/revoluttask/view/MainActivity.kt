@@ -1,7 +1,7 @@
 package com.example.revoluttask.view
 
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -69,7 +69,9 @@ class MainActivity : AppCompatActivity(), BaseChangeListener {
                 ratesInEur.putAll(result.rates)
                 updateList()
                 updateBase(baseCurrency)
-                Log.d("Result", "$result is the API response")
+                if (progress.isShown) {
+                    hideProgress()
+                }
             }, { error ->
                 error.printStackTrace()
             })
@@ -109,5 +111,9 @@ class MainActivity : AppCompatActivity(), BaseChangeListener {
         }
 
         currencyListAdapter.notifyDataSetChanged()
+    }
+
+    fun hideProgress() {
+        progress.visibility = View.GONE
     }
 }
