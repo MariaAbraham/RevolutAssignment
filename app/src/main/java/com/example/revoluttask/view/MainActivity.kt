@@ -1,11 +1,12 @@
 package com.example.revoluttask.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.revoluttask.R
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.revoluttask.data.model.Currency
 import com.example.revoluttask.data.repository.RepositoryProvider
 import com.google.android.material.appbar.CollapsingToolbarLayout
@@ -31,11 +32,11 @@ class MainActivity : AppCompatActivity(), BaseChangeListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_main)
+        setContentView(com.example.revoluttask.R.layout.activity_main)
 
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        val toolbar = findViewById<Toolbar>(com.example.revoluttask.R.id.toolbar)
         setSupportActionBar(toolbar)
-        val collapsingToolbar = findViewById<CollapsingToolbarLayout>(R.id.toolbar_layout)
+        val collapsingToolbar = findViewById<CollapsingToolbarLayout>(com.example.revoluttask.R.id.toolbar_layout)
         collapsingToolbar.title = "Rates"
         initializeAdapter()
 
@@ -53,11 +54,17 @@ class MainActivity : AppCompatActivity(), BaseChangeListener {
         moveToTop()
     }
 
+    override fun onBaseInputChange(value: Double) {
+        baseCurrency.value = value
+        updateList()
+    }
+
     private fun initializeAdapter() {
         recyler_currency.layoutManager = LinearLayoutManager(this)
         recyler_currency.hasFixedSize()
         currencyListAdapter = CurrencyListAdapter(this, currencyList, this)
         recyler_currency.adapter = currencyListAdapter
+        (recyler_currency.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
     }
 
     private fun syncCurrencyRates() {
@@ -72,6 +79,7 @@ class MainActivity : AppCompatActivity(), BaseChangeListener {
                 if (progress.isShown) {
                     hideProgress()
                 }
+                Log.d("Result", "$result is the API response")
             }, { error ->
                 error.printStackTrace()
             })
@@ -88,6 +96,7 @@ class MainActivity : AppCompatActivity(), BaseChangeListener {
 
     private fun moveToTop() {
         recyler_currency.scrollToPosition(0)
+        currencyListAdapter.notifyItemChanged(0)
     }
 
     private fun updateList() {
@@ -110,7 +119,7 @@ class MainActivity : AppCompatActivity(), BaseChangeListener {
             }
         }
 
-        currencyListAdapter.notifyDataSetChanged()
+        currencyListAdapter.notifyItemRangeChanged(1, currencyList.lastIndex)
     }
 
     fun hideProgress() {
