@@ -50,9 +50,11 @@ class CurrencyListAdapter(
         fun bindView(context: Context, currency: Currency, changeListener: BaseChangeListener, isFirst: Boolean = false) {
             bindTextAndImage(context, currency)
 
-            if (isFirst) bindFirst(currency, changeListener) else bindNonFirst(currency, changeListener)
+            // bind header and rest of the list separate
+            if (isFirst) bindFirst(currency, changeListener) else bindFromSecond(currency, changeListener)
         }
 
+        // keep the first index of list separate, since that becomes the header
         private fun bindFirst(currency: Currency, changeListener: BaseChangeListener) {
             overlay.visibility = View.GONE
             edtCurrency.hint = null
@@ -75,8 +77,11 @@ class CurrencyListAdapter(
             })
         }
 
-        private fun bindNonFirst(currency: Currency, changeListener: BaseChangeListener) {
+        // keep the updating part of list separate
+        private fun bindFromSecond(currency: Currency, changeListener: BaseChangeListener) {
             overlay.visibility = View.VISIBLE
+
+            // clear the text to make hint visible
             edtCurrency.setText("")
             edtCurrency.hint = String.format("%.4f", currency.value)
             overlay.setOnClickListener(View.OnClickListener {
@@ -84,6 +89,7 @@ class CurrencyListAdapter(
             })
         }
 
+        // independent of the edittext changes
         private fun bindTextAndImage(context: Context, currency: Currency) {
             txtCurrency.text = currency.name
             txtName.text = CountryNames.get(currency.name)

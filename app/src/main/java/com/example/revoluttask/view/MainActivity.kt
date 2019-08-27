@@ -50,11 +50,13 @@ class MainActivity : AppCompatActivity(), BaseChangeListener {
         disposable.dispose()
     }
 
+    // when base currency is changed
     override fun onBaseChange(currency: Currency) {
         updateBase(currency)
         moveToTop()
     }
 
+    // when text inout is changed
     override fun onBaseInputChange(value: Double) {
         baseCurrency.value = value
         updateList()
@@ -66,7 +68,9 @@ class MainActivity : AppCompatActivity(), BaseChangeListener {
         recyler_currency.hasFixedSize()
         currencyListAdapter = CurrencyListAdapter(this, currencyList, this)
 
+        // remove animations that causes flickering of UI, while updating
         (recyler_currency.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+
         recyler_currency.adapter = currencyListAdapter
     }
 
